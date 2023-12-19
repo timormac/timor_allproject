@@ -11,14 +11,42 @@ package middle;
 public class 两数相加 {
 
     public static void main(String[] args) {
-        两数相加 a = new 两数相加();
-        ListNode listNode = a.addTwoNumbers(new ListNode(8,new ListNode(8)),new ListNode(4,new ListNode(6,new ListNode(3) )) );
-        ListNode tmp = listNode;
-        while ( tmp!=null ){
-            System.out.print(tmp.val);
-            tmp = tmp.next;
 
-        }
+
+        // 2 4 3
+        ListNode node1 = new ListNode();
+        System.out.println(node1.val);
+
+
+        ListNode node2 = new ListNode();
+
+        node1.next=node2;
+
+
+        node1.val = 4 ;
+        //node1.next =   new ListNode(4);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 

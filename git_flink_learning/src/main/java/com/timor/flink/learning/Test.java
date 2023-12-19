@@ -1,8 +1,14 @@
 package com.timor.flink.learning;
 
 
+import com.timor.flink.learning.a1wordcountdemo.A1_WordCountBatch;
 import com.timor.flink.learning.dao.WaterSensor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.operators.AggregateOperator;
+import org.apache.flink.api.java.operators.DataSource;
+import org.apache.flink.api.java.operators.FlatMapOperator;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.PojoTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -22,10 +28,18 @@ import com.timor.flink.learning.dao.WaterSensor;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> ds = env.fromCollection(Arrays.asList(1,2,3,4));
-        SingleOutputStreamOperator<String> map = ds.map(String::valueOf);
+        //创建执行环境
+        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        DataSource<String> lineDS = env.readTextFile("input_data/wordcount.txt");
 
+        //flatMap方法需要传一个对象，是实现了FlatMapFunction接口的对象
+        FlatMapOperator<String, Object> flatmap = lineDS.flatMap((value, out) -> {
+            String[] splits = value.split(" ");
+            for (String split : splits) out.collect(split);
+        });
+
+
+        env.execute();
 
     }
 

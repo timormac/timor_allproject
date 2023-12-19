@@ -33,38 +33,18 @@ import java.util.HashSet;
  */
 public class FlinkTestMain {
     public static void main(String[] args) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(3);
-        //从kafka获取
-        KafkaSource<String> kf= KafkaSource.<String>builder() //builder前面要指定范型方法
-                .setBootstrapServers(ConfigProperty.KAFKA_SERVER)
-                .setGroupId("dim_consumer")
-                .setTopics("maxwell")
-                .setValueOnlyDeserializer(new SimpleStringSchema())//指定从kafka获取的数据的反序列化器
-                .setStartingOffsets(OffsetsInitializer.latest())  //设置消费起始offset
-                .build();
 
-        DataStreamSource<String> kafkaDS = env.fromSource(kf, WatermarkStrategy.noWatermarks(), "kafkasource");
+        String id = "haha" ;
+        String s="{\"address\":\"北京市\",\"age\":20,\"name\":\"张三\"" +
+                ",\"id\":"+ "\""+id +"\"" +
+                "}";
 
-        SingleOutputStreamOperator<String> map = kafkaDS.map(s -> {
-            JSONObject jsonObject = JSON.parseObject(s);
-            String table = jsonObject.getString("table");
-            String id = jsonObject.getString("id");
-            return table + ":" + id;
-        });
+        System.out.println(s);
 
-        kafkaDS.process(new ProcessFunction<String, String>() {
-            @Override
-            public void open(Configuration parameters) throws Exception {
-                super.open(parameters);
-            }
+        JSONObject jsonObject = JSON.parseObject(s);
+        System.out.println(jsonObject.getString("id"));
 
-            @Override
-            public void processElement(String value, ProcessFunction<String, String>.Context ctx,
-                                       Collector<String> out) throws Exception {
 
-                            }
-        });
 
     }
 }

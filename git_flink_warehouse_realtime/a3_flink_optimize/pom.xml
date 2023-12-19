@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lpc.realtime.warehouse</groupId>
-    <artifactId>a2_warehouse</artifactId>
+    <groupId>com.timor</groupId>
+    <artifactId>flink_optimize</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -14,6 +14,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <dependencies>
 
@@ -39,10 +40,26 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--  连接kafka流 -->
+        <!--  flink连接kafka流 -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <!--flink-kafka导入了3.2.3版本的kafka-clients
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
+        -->
+        <!--  状态后端rocksdb -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-statebackend-rocksdb</artifactId>
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -59,40 +76,31 @@
             <version>2.12.0</version>
         </dependency>
 
-        <!--  hbase-->
+
+        <!--  mysql连接池  -->
         <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>2.0.5</version>
-            <scope>provided</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.10</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-server</artifactId>
-            <version>2.0.5</version>
-            <scope>provided</scope>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
         </dependency>
 
-        <!--  自己的组件-->
-        <dependency>
-            <groupId>com.lpc.datamock</groupId>
-            <artifactId>a1_datamock</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lpc.hbase</groupId>
-            <artifactId>b2_hbaseAPI</artifactId>
-            <version>1.0</version>
-        </dependency>
 
     </dependencies>
 
 
-
-    <!-- 这个会把除了provided,test外的所以依赖直接打包的项目jar中 -->
     <build>
         <plugins>
             <plugin>
@@ -113,7 +121,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
 </project>

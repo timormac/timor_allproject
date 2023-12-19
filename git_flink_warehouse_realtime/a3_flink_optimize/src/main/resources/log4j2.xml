@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <!--  /home/lpc/all_logs/flink_optimize_log         -->
+        <!--    C:\Users\lpc\Desktop\data\druid_logs       -->
+        <Property name="logPath">/home/lpc/all_logs/flink_optimize_log</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="infoAppender" fileName="${logPath}/info.log"
+                     filePattern="${logPath}/info-%d{MM-dd-yyyy}.log.gz">
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="errorAppender" fileName="${logPath}/error.log"
+                     filePattern="${logPath}/error-%d{MM-dd-yyyy}.log.gz">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="infoAppender"/>
+            <AppenderRef ref="errorAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
