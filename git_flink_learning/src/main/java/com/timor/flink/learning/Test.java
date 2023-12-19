@@ -20,13 +20,12 @@ import com.timor.flink.learning.dao.WaterSensor;
  * @Version:1.0
  */
 public class Test {
-
     public static void main(String[] args) throws Exception {
 
-        long l = System.currentTimeMillis();
-        System.out.println(l);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        DataStreamSource<Integer> ds = env.fromCollection(Arrays.asList(1,2,3,4));
+        SingleOutputStreamOperator<String> map = ds.map(String::valueOf);
 
-        System.out.println( "9".equals(9)  );
 
     }
 

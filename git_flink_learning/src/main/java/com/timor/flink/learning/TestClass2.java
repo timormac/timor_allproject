@@ -12,10 +12,4 @@ package com.timor.flink.learning;
 
 
 public class TestClass2 {
-    String name;
-    Integer age;
-    void m1(){
-
-        System.out.println(name+age);
-    }
 }
