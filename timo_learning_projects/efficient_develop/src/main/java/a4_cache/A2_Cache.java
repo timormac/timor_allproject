@@ -43,6 +43,5 @@ public class A2_Cache {
         System.out.println("Cache contents:");
         cache.asMap().forEach((key, value) -> System.out.println(key + ": " + value));
 
-
     }
 }
