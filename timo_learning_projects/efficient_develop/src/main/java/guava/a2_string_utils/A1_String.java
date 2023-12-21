@@ -1,4 +1,4 @@
-package a2_string_utils;
+package guava.a2_string_utils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;

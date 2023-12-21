@@ -1,4 +1,4 @@
-package a3_math_utils;
+package guava.a3_math_utils;
 
 import com.google.common.math.IntMath;
 
