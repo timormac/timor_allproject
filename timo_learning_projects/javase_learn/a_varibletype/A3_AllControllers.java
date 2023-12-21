@@ -17,8 +17,9 @@ public class A3_AllControllers {
             System.out.println("1");
         }
 
-        //简单缩写写法,当{}里面逻辑简单可以省略
+        //简单缩写写法,当{}里面逻辑简单可以省略 不建议这种写法 //建议始终都写{}
         if(num <1)  num=10 ;
+
         
         //if第二种写法
         if( num >1 ){
@@ -39,7 +40,7 @@ public class A3_AllControllers {
             System.out.println(1);
         }
 
-        //省略写法
+        //省略写法，不建议这种写法 //建议始终都写{}
         if (num>5) System.out.println("1");
         else if (num>3)  System.out.println(1);
 
