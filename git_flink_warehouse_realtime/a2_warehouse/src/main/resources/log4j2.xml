@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Properties>
-        <Property name="logPath">/Users/timor/Desktop/data/logs</Property>
+        <!--  C:\Users\lpc\Desktop\data\druid_logs     -->
+        <!--  /Users/timor/Desktop/data/logs     -->
+        <Property name="logPath">C:\Users\lpc\Desktop\data\druid_logs</Property>
     </Properties>
     <Appenders>
         <RollingFile name="infoAppender" fileName="${logPath}/info.log"

@@ -12,6 +12,8 @@ public class A0_Config {
     public static final String MYSQL_USER  = "root";
     public static final String MYSQL_PASSWORD  ="121995";
     public static final String MYSQL_URL  = "jdbc:mysql://project1:3306/flink_warehouse_db?useUnicode=true&characterEncoding=utf8";
+    public static final String HDFS_PATH  = "hdfs://project1:8020";
+
 
 
 }

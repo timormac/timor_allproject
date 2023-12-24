@@ -1,4 +1,4 @@
-package com.lpc.realtime.warehouse.utils;
+package com.lpc.realtime.warehouse.a2_utils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSON;
  * @Date 2023/11/2 18:44
  * @Version 1.0
  */
-public class JsonTool {
+public class Tm_JsonTool {
 
     public static  boolean isJSON( String str ){
 

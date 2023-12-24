@@ -1,4 +1,4 @@
-package com.lpc.realtime.warehouse.app.dim;
+package com.lpc.realtime.warehouse.a7_app.dim;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
@@ -8,9 +8,9 @@ import com.lpc.datamock.dao.FlinkConfig;
 import com.lpc.datamock.tools.A1_JDBCPool;
 import com.lpc.datamock.tools.A2_TableQueryDao;
 import com.lpc.hbase.tools.HbaseTools;
-import com.lpc.realtime.warehouse.bean.PojoString;
-import com.lpc.realtime.warehouse.config.ConfigProperty;
-import com.lpc.realtime.warehouse.utils.JsonTool;
+import com.lpc.realtime.warehouse.a3_dao.PojoString;
+import com.lpc.realtime.warehouse.a2_utils.A1_ConfigProperty;
+import com.lpc.realtime.warehouse.a2_utils.Tm_JsonTool;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
@@ -42,7 +42,7 @@ public class A1_GetDataOptimize {
         env.setParallelism(4);
         //从kafka获取
         KafkaSource<String> kf= KafkaSource.<String>builder() //builder前面要指定范型方法
-                .setBootstrapServers(ConfigProperty.KAFKA_SERVER)
+                .setBootstrapServers(A1_ConfigProperty.KAFKA_SERVER)
                 .setGroupId("dim_consumer")
                 .setTopics("maxwell")
                 .setValueOnlyDeserializer(new SimpleStringSchema())//指定从kafka获取的数据的反序列化器
@@ -72,7 +72,7 @@ public class A1_GetDataOptimize {
             @Override
             public void processElement(String value, Context ctx, Collector<String> out) throws Exception {
                 //非JSON,分流到侧输出流wrongJson
-                if (!JsonTool.isJSON(value)) ctx.output(wrongJson, new PojoString(value) );
+                if (!Tm_JsonTool.isJSON(value)) ctx.output(wrongJson, new PojoString(value) );
                     //监控config表分流到config
                 else if ("flinkconfig".equals(JSON.parseObject(value).getString("table"))) {
                     JSONObject data = JSON.parseObject(value).getJSONObject("data");
@@ -116,7 +116,7 @@ public class A1_GetDataOptimize {
                     configSet.add(s);
                 }
 
-                this.connection = HbaseTools.getHbaseConnection(ConfigProperty.HBASE_SERVER);
+                this.connection = HbaseTools.getHbaseConnection(A1_ConfigProperty.HBASE_SERVER);
                 System.out.println("open中创建hbase连结");
 
             }
@@ -154,7 +154,7 @@ public class A1_GetDataOptimize {
             @Override
             public void open(Configuration parameters) throws Exception {
                 System.out.println("看看open执行几次");
-                this.connection = HbaseTools.getHbaseConnection(ConfigProperty.HBASE_SERVER);
+                this.connection = HbaseTools.getHbaseConnection(A1_ConfigProperty.HBASE_SERVER);
             }
 
             @Override

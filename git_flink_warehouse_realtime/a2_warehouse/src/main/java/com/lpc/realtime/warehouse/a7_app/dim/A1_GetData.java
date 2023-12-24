@@ -1,4 +1,4 @@
-package com.lpc.realtime.warehouse.app.dim;
+package com.lpc.realtime.warehouse.a7_app.dim;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
@@ -8,9 +8,9 @@ import com.lpc.datamock.dao.FlinkConfig;
 
 import com.lpc.datamock.tools.A1_JDBCPool;
 import com.lpc.datamock.tools.A2_TableQueryDao;
-import com.lpc.realtime.warehouse.config.ConfigProperty;
-import com.lpc.realtime.warehouse.bean.PojoString;
-import com.lpc.realtime.warehouse.utils.JsonTool;
+import com.lpc.realtime.warehouse.a2_utils.A1_ConfigProperty;
+import com.lpc.realtime.warehouse.a3_dao.PojoString;
+import com.lpc.realtime.warehouse.a2_utils.Tm_JsonTool;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -21,8 +21,6 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.*;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
@@ -48,7 +46,7 @@ public class A1_GetData {
         env.setParallelism(4);
         //从kafka获取
         KafkaSource<String> kf= KafkaSource.<String>builder() //builder前面要指定范型方法
-                .setBootstrapServers(ConfigProperty.KAFKA_SERVER)
+                .setBootstrapServers(A1_ConfigProperty.KAFKA_SERVER)
                 .setGroupId("dim_consumer")
                 .setTopics("maxwell")
                 .setValueOnlyDeserializer(new SimpleStringSchema())//指定从kafka获取的数据的反序列化器
@@ -79,7 +77,7 @@ public class A1_GetData {
             @Override
             public void processElement(String value, Context ctx, Collector<String> out) throws Exception {
                 //非JSON,分流到侧输出流wrongJson
-                if (!JsonTool.isJSON(value)) ctx.output(wrongJson, new PojoString(value) );
+                if (!Tm_JsonTool.isJSON(value)) ctx.output(wrongJson, new PojoString(value) );
                 //监控config表分流到config
                 else if ("flinkconfig".equals(JSON.parseObject(value).getString("table"))) {
                     JSONObject data = JSON.parseObject(value).getJSONObject("data");

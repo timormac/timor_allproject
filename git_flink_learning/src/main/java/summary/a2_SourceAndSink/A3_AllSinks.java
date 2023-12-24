@@ -28,8 +28,11 @@ public class A3_AllSinks {
         DataStreamSource<String> ds = env.fromElements("a", "b");
 
         //TODO  -------------------------------------fileSink------------------------------------------
+
+        //如果是hdfs还要设置签名
+
         FileSink fileSink = FileSink
-                .forRowFormat(new Path(""), new SimpleStringEncoder())
+                .forRowFormat(new Path( "hdfs://project1:8020/aaa"), new SimpleStringEncoder())
                  .withOutputFileConfig( OutputFileConfig.builder()
                         .withPartPrefix("timor") //前缀
                         .withPartSuffix(".log")

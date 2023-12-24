@@ -1,10 +1,10 @@
-package com.lpc.realtime.warehouse;
+package com.lpc.realtime.warehouse.a9_test;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * @Title: com.lpc.realtime.warehouse.Log4j2Demo
+ * @Title: com.lpc.realtime.warehouse.a9_test.Log4j2Demo
  * @Package: PACKAGE_NAME
  * @Description:
  * @Author: lpc

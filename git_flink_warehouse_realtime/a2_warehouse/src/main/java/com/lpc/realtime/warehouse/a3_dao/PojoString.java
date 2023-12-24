@@ -1,4 +1,4 @@
-package com.lpc.realtime.warehouse.bean;
+package com.lpc.realtime.warehouse.a3_dao;
 
 import java.io.Serializable;
 
