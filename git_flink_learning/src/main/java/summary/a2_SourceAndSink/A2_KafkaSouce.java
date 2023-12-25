@@ -40,25 +40,25 @@ public class A2_KafkaSouce {
         DataStreamSource<String> fileDS = env.fromSource(source, WatermarkStrategy.noWatermarks(), "kafkasource");
 
         //TODO  -------------------------------------addSouce-------------------------------------------
-        //addsource里面有更细致的管理
-
-        //实现sourceFunction的kafka有3个,FlinkKafkaShuffleConsumer，FlinkKafkaConsumer，FlinkKafkaConsumerBase
-        //FlinkKafkaConsumer过时了,FlinkKafkaShuffleConsumer是他的继承类，FlinkKafkaConsumerBase是kafka消费者的基类
-
+        /**
+         *  addsource里面有更细致的管理
+         *   实现sourceFunction的kafka有3个,FlinkKafkaShuffleConsumer，FlinkKafkaConsumer，FlinkKafkaConsumerBase
+         *   FlinkKafkaConsumer过时了,FlinkKafkaShuffleConsumer是他的继承类，FlinkKafkaConsumerBase是kafka消费者的基类
+         */
         Properties properties = new Properties();
         //将自动提交关闭
         properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+
         FlinkKafkaConsumer kafka = new FlinkKafkaConsumer("aa", new SimpleStringSchema(), properties);
 
-        //FlinkKafkaConsumerBase里有一些参数结合kafka和flink的方法
+        //TODO FlinkKafkaConsumerBase里有一些参数结合kafka和flink的方法
+        //设置checkpoint提交,设置这个后kafka的自动提交会失效
+        kafka.setCommitOffsetsOnCheckpoints(true)  ;
+        //设置水位线
+        kafka.assignTimestampsAndWatermarks(WatermarkStrategy.noWatermarks());
+        //从某一时间开始消费
+        kafka.setStartFromTimestamp(1000L);
 
-        kafka
-                .setCommitOffsetsOnCheckpoints(true)  //设置checkpoint提交,设置这个后kafka的自动提交会失效
-                .assignTimestampsAndWatermarks(WatermarkStrategy.noWatermarks())  //设置水位线
-                 .setStartFromTimestamp(1000L)   //从某一时间开始消费
-                .setStartFromEarliest()
-                .setStartFromLatest()
-                .setStartFromGroupOffsets() ; //从消费者偏移量来消费
 
         DataStreamSource dataStreamSource = env.addSource(kafka);
 

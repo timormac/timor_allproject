@@ -22,7 +22,7 @@ public class Producer3 {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, file.getProperty("bootstrap_servers") );
         //指定key的序列化类型
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        //指定key的序列化类型
+        //指定value的序列化类型
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
 
         KafkaProducer<String,String> kafkaProducer = new KafkaProducer<>(properties);

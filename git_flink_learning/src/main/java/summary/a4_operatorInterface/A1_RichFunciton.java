@@ -21,48 +21,6 @@ public class A1_RichFunciton {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStream<String> ds1 = env.fromCollection(Arrays.asList("a", "b"));
-        ds1.addSink(
-                new RichSinkFunction() {
-            @Override
-            public void setRuntimeContext(RuntimeContext t) {
-                super.setRuntimeContext(t);
-            }
-
-            @Override
-            public RuntimeContext getRuntimeContext() {
-                return super.getRuntimeContext();
-            }
-
-            @Override
-            public IterationRuntimeContext getIterationRuntimeContext() {
-                return super.getIterationRuntimeContext();
-            }
-
-            @Override
-            public void open(Configuration parameters) throws Exception {
-                super.open(parameters);
-            }
-
-            @Override
-            public void close() throws Exception {
-                super.close();
-            }
-
-            @Override
-            public void invoke(Object value, Context context) throws Exception {
-
-            }
-
-            @Override
-            public void writeWatermark(Watermark watermark) throws Exception {
-
-            }
-
-            @Override
-            public void finish() throws Exception {
-
-            }
-        });
 
     }
 
