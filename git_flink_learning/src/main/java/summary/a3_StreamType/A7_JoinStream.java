@@ -1,5 +1,6 @@
 package summary.a3_StreamType;
 
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.JoinedStreams;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -23,7 +24,18 @@ public class A7_JoinStream {
         /**
          * JoinedStreams,是一个新。内部有2个流属性
          * 只有一个where方法
+         * 好像没j8用啊！
          */
         JoinedStreams<String, String> join2 = ds1.join(ds2);
+
+        //只有一个where方法
+        JoinedStreams<String, String>.Where<Object> where = join2.where(new KeySelector<String, Object>() {
+            @Override
+            public Object getKey(String value) throws Exception {
+                return null;
+            }
+        });
+
+
     }
 }

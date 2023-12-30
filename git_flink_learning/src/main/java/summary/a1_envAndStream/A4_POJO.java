@@ -33,3 +33,9 @@ public class A4_POJO {
         return super.toString() + name ;
     }
 }
+
+class A5_InnerPojo {
+    String name;
+    public A5_InnerPojo() {
+    }
+}
