@@ -34,6 +34,8 @@ public class A2_KafkaUtils {
     }
 
 
+
+
     public static <K,V> KafkaProducer<K,V> getProducer( String keyClassName ,String valueClassName ){
         Properties properties = new Properties();
 
@@ -52,6 +54,8 @@ public class A2_KafkaUtils {
         String name = StringSerializer.class.getName();
         return   getProducer(name,name);
     }
+
+
 
 
 

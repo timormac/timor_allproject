@@ -43,15 +43,16 @@ public class A1_Env {
         //启用checkpoint，5分钟触发一次,模式是精准一次，还可以选择AT_LEAST_ONCE
         en1.enableCheckpointing(5*60*1000L, CheckpointingMode.EXACTLY_ONCE);
 
-        //设置changelog状态后端,这样checkpoint就可以记录增量变化,保存时更快。pom导入flink-statebackend-rocksdb依赖
-        en1.enableChangelogStateBackend(true);
-
-        //源码注释:checkpoints based on the configured {@link org.apache.flink.runtime.state.CheckpointStorage},当你开启ckp会自动存到指定位置
-        //设置状态后端,当声明带状态的变量valueState时,默认是memoryStateBackend,我们要手动去指定HashMapStateBackend
-        en1.setStateBackend(new HashMapStateBackend());
 
         //StateBackend一般都配合checkpoint使用
         en1.getCheckpointConfig().setCheckpointStorage("hdfs://project1:8020/flink_cep");
+
+        //设置changelog状态后端,这样checkpoint就可以记录增量变化,保存时更快。pom导入flink-statebackend-rocksdb依赖
+        en1.enableChangelogStateBackend(true);
+        
+        //源码注释:checkpoints based on the configured {@link org.apache.flink.runtime.state.CheckpointStorage},当你开启ckp会自动存到指定位置
+        //设置状态后端,当声明带状态的变量valueState时,默认是memoryStateBackend,我们要手动去指定HashMapStateBackend
+        en1.setStateBackend(new HashMapStateBackend());
 
         //源码注释please configure a {@link* org.apache.flink.runtime.state.CheckpointStorage}
         //设置状态后端为rocksdb,如果启用增量检查点就输入true,不需要就不带参数

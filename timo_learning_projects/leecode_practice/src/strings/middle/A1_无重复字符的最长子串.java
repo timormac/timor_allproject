@@ -2,9 +2,7 @@ package strings.middle;
 
 import timor.utils.Tuples2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * @Author Timor
@@ -17,17 +15,20 @@ public class A1_无重复字符的最长子串 {
 
 
         String s;
-        s="abdefbcadadc";
+       // s="abdefbcadadc";
+       // s= "abcabcbb";
+        s = "a";
+        //s = "aaa";
         A1_无重复字符的最长子串 a = new A1_无重复字符的最长子串();
         //System.out.println(a.lengthOfLongestSubstring(s));
 
-        System.out.println( a.lengthOfLongestSubstring_1(s) );
+        System.out.println( a.lengthOfLongestSubstring_2(s) );
 
 
     }
 
 
-    //暴力匹配法
+    //TODO 暴力匹配法
     public int lengthOfLongestSubstring(String s) {
         char[] chars = s.toCharArray();
 
@@ -51,49 +52,95 @@ public class A1_无重复字符的最长子串 {
                     max_length =  max_length > (j-i+1) ? max_length:(j-i+1);
                     set.clear();
                 }
-
             }
         }
         return max_length;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    //TODO 官方的滑动窗口
+    /**具体思路如下
+     * 案例:abecfca
+     * 第一步从首字母开始开窗,找到最长的无重复串   ｜abecf｜cadc
+     * 记录长度,然后移动左指针到第一个重复字符+1，abec｜f｜cadcmn，,然后右指针后移，找到最长无重复串
+     * 一次for循环遍历就行结束，也不用嵌套
+     */
+    public int lengthOfLongestSubstring_2(String s) {
+        char[] chars = s.toCharArray();
+        int max_length = 0;
+        Map<Character,Integer> map = new LinkedHashMap<>();
+        int pinBegin =0 ;
+
+        for (int i = 0; i < chars.length;i++ ) {
+            char ele = chars[i];
+            if( !map.keySet().contains( ele ) ){
+                map.put( ele ,i );
+                if( i == chars.length-1 ){
+                    max_length = Math.max( max_length , i-pinBegin+1 );
+                }
+            }else {
+                //记录最大长度
+                max_length = Math.max(max_length, i - pinBegin);
+                //把keyset重复元素前的元素移除，然后跳指针到重复元素位置+1
+                int tmp =  map.get(ele)+1 ;
+                for (int t = pinBegin ; t < tmp ; t++) {
+                    map.remove( chars[t] );
+                }
+                //左指针后移动
+                pinBegin = tmp;
+                map.put( ele,i ) ;
+            }
+        }
+        return max_length;
     }
 
+
+
+
+
     //自己优化，先相同数，划分区域块。 包含其他区域块的会被移除(无效的区域块)
-    //TODO 这里逻辑有问题，再思考下
+    //这垃圾方法放弃了，要控制的太多，逻辑也不清晰
     public int lengthOfLongestSubstring_1(String s) {
+
         char[] chars = s.toCharArray();
         HashMap<Character, ArrayList<Integer>> map = new HashMap<>();
 
 
+        //第一个重复节点
+        int first_node = 1000000;
+        //最后一个重复节点
+        int last_node =0;
+        int total = 0 ;
+        int kk = 0;
+
+
         for (int i = 0; i < chars.length; i++) {
             char  ch = chars[i];
-
             if ( !map.containsKey( ch ) ){
                 ArrayList<Integer> list = new ArrayList<>();
                 list.add(i);
                 map.put(ch,list);
+                total +=1;
+
             }else {
                 map.get(ch).add(i);
+                last_node = i > last_node ? i:last_node;
+                first_node = map.get(ch).get(0)<first_node ? map.get(ch).get(0):first_node;
+                kk +=1;
             }
         }
 
+
         HashSet<Tuples2<Integer,Integer> > set = new HashSet<>();
 
-
         for (ArrayList<Integer> list : map.values()) {
-            list.sort( (a,b)->{ return a>b ? 1:0;} );
+            list.sort( (a,b) -> a>b ? 1:0 );
             for (int i = 0; i < list.size()-1 ; i++) {
                 Tuples2<Integer, Integer> tuple = new Tuples2<>(list.get(i), list.get(i + 1));
-
-                //TODO 这里逻辑有问题，再思考下,如果提前移除，会不会导致原本应该移除的，最后因提前移除，导致留下来了，好像也不会，这个是留下最小的，大的能移除的小的都能移除
 
                 //记录本条是否插入
                 boolean flag = true;
                 for (Tuples2<Integer, Integer> filter : set) {
+                    //移除那些范围完全覆盖，当先指针元素的
                     if( filter.f1()< tuple.f1() && filter.f2()>tuple.f2() ){
                         set.remove(filter);
                     }
@@ -108,23 +155,25 @@ public class A1_无重复字符的最长子串 {
             }
         }
 
-        int max_num =0 ;
-        Tuples2<Integer,Integer>  result = null ;
+        System.out.println("第一节点"+first_node);
+        System.out.println("第二节点"+last_node);
+
+        first_node = first_node+1;
+        last_node = chars.length -last_node ;
+
+        int max_num = first_node>last_node ? first_node:last_node;
+
+
+        if (kk==0){
+            max_num =  chars.length;
+        }
+        System.out.println(max_num);
 
         for (Tuples2<Integer, Integer> need : set) {
-
             int length =  need.f2() -need.f1();
-            if(result == null) {
-                result = need ;
-                max_num = length;
-            }
-
-            if( length> max_num ){
-                result = need;
-                max_num = length;
-            }
-
+            max_num = max_num>length ?max_num :length;
         }
+
         return  max_num;
     }
 }
