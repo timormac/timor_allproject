@@ -15,22 +15,17 @@ object Z1_Test {
 
   def main(args: Array[String]): Unit = {
 
-    val conf = new SparkConf()
-      .setAppName("a1")
-      .setMaster("local[*]")
-      .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-      // 注册自定义类,不需要自己手动将类实现Kyyo序列化,不注册Perso，会报错
-      .registerKryoClasses(Array(classOf[Searcher], classOf[Person1]))
-
+    val conf = new SparkConf().setAppName("a1").setMaster("local[*]")
     val context: SparkContext = new SparkContext(conf)
-    val rdd: RDD[String] = context.makeRDD(List("a", "b","c"))
-    val map: RDD[Person1] = rdd.map( new Person1(_) )
-    val index: RDD[(Int, Person1)] = map.mapPartitionsWithIndex((index, iter) => {
-      println(index)
-      iter.map((index, _))
+    val rdd: RDD[String] = context.makeRDD(List("a", "b"))
+    val map: RDD[String] = rdd.map( x =>{
+      println(x)
+      x+"|1"
     })
-    index.collect().foreach(println)
+    map.cache()
 
+    map.collect().foreach(println)
+    map.collect().foreach(println)
 
 
 

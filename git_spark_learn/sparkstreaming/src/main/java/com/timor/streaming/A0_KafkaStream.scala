@@ -1,14 +1,22 @@
-package atguigu.streaming.app
+package com.timor.streaming
 
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.dstream.InputDStream
+import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object KafkaDirectApiTest02 {
+/**
+ * @Title: A0_KafkaStream
+ * @Package: com.timor.streaming
+ * @Description:
+ * @Author: lpc
+ * @Date: 2024/1/20 14:27
+ * @Version:1.0
+ */
+object A0_KafkaStream {
 
-  def getSSC: StreamingContext = {
+  def main(args: Array[String]): Unit = {
 
     //1.创建SparkConf
     val sparkConf: SparkConf = new SparkConf().setAppName("KafkaReceiverApiTest").setMaster("local[*]")
@@ -16,35 +24,20 @@ object KafkaDirectApiTest02 {
     //2.创建StreamingContext
     val ssc = new StreamingContext(sparkConf, Seconds(5))
 
-    ssc.checkpoint("./ck1")
-
     //3.使用DirectAPI消费Kafka数据创建流
     val kafkaParams: Map[String, String] = Map[String, String](
       "zookeeper.connect" -> "hadoop102:2181,hadoop103:2181,hadoop104:2181",
       ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> "hadoop102:9092,hadoop103:9092,hadoop104:9092",
       ConsumerConfig.GROUP_ID_CONFIG -> "bigdata0523_1")
 
-    val lineDStream: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](ssc,
+    val kafkaStream: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](ssc,
       LocationStrategies.PreferConsistent,
       ConsumerStrategies.Subscribe[String, String](Set("topicName"), kafkaParams)
     )
-    //4.计算WordCount并打印
-//    lineDStream.flatMap(_._2.split(" "))
-//      .map((_, 1))
-//      .reduceByKey(_ + _)
-//      .print()
+    val DStream: DStream[String] = kafkaStream.map(_.value())
 
-    ssc
-  }
-
-  def main(args: Array[String]): Unit = {
-
-    val ssc: StreamingContext = StreamingContext.getActiveOrCreate("./ck1", () => getSSC)
-
-    //5.启动任务
-    ssc.start()
-    ssc.awaitTermination()
 
   }
+
 
 }

@@ -1,10 +1,9 @@
 package atguigu.streaming.app
 
-import kafka.serializer.StringDecoder
-import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.dstream.InputDStream
-import org.apache.spark.streaming.kafka.KafkaUtils
+import org.apache.spark.streaming.dstream.{DStream, InputDStream}
+import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 object KafkaDirectApiTest01 {
@@ -19,14 +18,18 @@ object KafkaDirectApiTest01 {
 
     //3.使用DirectAPI消费Kafka数据创建流
     val kafkaParams: Map[String, String] = Map[String, String](
-      "zookeeper.connect" -> "hadoop102:2181,hadoop103:2181,hadoop104:2181",
-      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> "hadoop102:9092,hadoop103:9092,hadoop104:9092",
-      ConsumerConfig.GROUP_ID_CONFIG -> "bigdata0523_1")
+      "zookeeper.connect" -> "project1:2181,project2:2181,project3:2181",
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> "project1:9092,project2:9092,project3:9092",
+      ConsumerConfig.GROUP_ID_CONFIG -> "kafkaDemo")
 
-    val lineDStream: InputDStream[(String, String)] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("test"))
+    val kafkaStream: InputDStream[ConsumerRecord[String,String]] = KafkaUtils.createDirectStream[String,String](ssc,
+      LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[String,String]  (Set("topicName"), kafkaParams)
+    )
+    val DStream: DStream[String] = kafkaStream.map(_.value())
 
     //4.计算WordCount并打印
-    lineDStream.flatMap(_._2.split(" "))
+    DStream.flatMap(_.split(" "))
       .map((_, 1))
       .reduceByKey(_ + _)
       .print()
