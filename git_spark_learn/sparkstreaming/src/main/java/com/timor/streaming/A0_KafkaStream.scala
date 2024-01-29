@@ -1,18 +1,17 @@
 package com.timor.streaming
 
+import com.timor.utils.A0_Configs
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
- * @Title: A0_KafkaStream
- * @Package: com.timor.streaming
- * @Description:
- * @Author: lpc
- * @Date: 2024/1/20 14:27
- * @Version:1.0
+ * @Author Timor
+ * @Date 2024/1/22 16:13
+ * @Version 1.0
  */
 object A0_KafkaStream {
 
@@ -26,15 +25,25 @@ object A0_KafkaStream {
 
     //3.使用DirectAPI消费Kafka数据创建流
     val kafkaParams: Map[String, String] = Map[String, String](
-      "zookeeper.connect" -> "hadoop102:2181,hadoop103:2181,hadoop104:2181",
-      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> "hadoop102:9092,hadoop103:9092,hadoop104:9092",
-      ConsumerConfig.GROUP_ID_CONFIG -> "bigdata0523_1")
+      // "zookeeper.connect" ->  A0_Configs.ZOOKEEPER_SERVERS,
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> A0_Configs.KAFKA_SERVERS ,
+      ConsumerConfig.GROUP_ID_CONFIG -> "bigdata0523_1",
+      ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer].getName,
+      ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer].getName
+    )
 
-    val kafkaStream: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](ssc,
+
+
+    val kafkaStream: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](
+      ssc,
       LocationStrategies.PreferConsistent,
-      ConsumerStrategies.Subscribe[String, String](Set("topicName"), kafkaParams)
+      ConsumerStrategies.Subscribe[String, String](Set("terminal_produce"), kafkaParams)
     )
     val DStream: DStream[String] = kafkaStream.map(_.value())
+    DStream.print()
+
+    ssc.start()
+    ssc.awaitTermination()
 
 
   }
