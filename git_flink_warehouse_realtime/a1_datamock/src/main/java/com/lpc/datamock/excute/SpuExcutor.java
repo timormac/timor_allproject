@@ -22,4 +22,5 @@ public class SpuExcutor {
         mock.mockAndInsert(100);
 
     }
+
 }

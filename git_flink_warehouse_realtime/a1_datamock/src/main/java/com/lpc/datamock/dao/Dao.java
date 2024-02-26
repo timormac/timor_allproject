@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public interface Dao {
 
-     //在A2_TableQueryDao中会查询数据集然后把查询结果，按字段顺序放入arr中
+     //在A2_TableQueryDao中会查询数据集然后把查询结果,按字段顺序放入arr中
+     //传入mysql表一条数据,封装成对应对象
      Dao getInstance(ArrayList<String> arr);
 }

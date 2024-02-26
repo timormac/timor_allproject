@@ -56,8 +56,4 @@ public class A1_JDBCPool {
     }
 
 
-
-
-
-
 }

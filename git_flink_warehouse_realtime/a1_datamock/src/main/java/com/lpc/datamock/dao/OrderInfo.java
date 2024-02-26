@@ -27,6 +27,7 @@ public class OrderInfo  {
     private String remark;
 
 
+
     public OrderInfo(String orderno, int userid, int spuid, int skuid, int amounts,
                      double price, String cuponno, double paid, String area, Timestamp create, Timestamp modify, String remark) {
         this.orderno = orderno;

@@ -16,6 +16,7 @@ import java.util.Map;
 public class Tm_MysqlUtils {
 
 
+    //获取mysql表字段类型map<字段名,类型>
     public static HashMap<String, Object> getTableColume(Connection connect, String tableName) throws SQLException {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         String sql = "describe  " + tableName ;
@@ -32,6 +33,7 @@ public class Tm_MysqlUtils {
     }
 
 
+    //将mysql表类型,转为phoenix字段类型map<字段名,类型>
     public static HashMap<String, Object> getTableColumeForPhoenix(Connection connect, String tableName) throws SQLException {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         String sql = "describe  " + tableName ;
