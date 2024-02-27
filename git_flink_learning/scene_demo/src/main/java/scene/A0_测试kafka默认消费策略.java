@@ -37,6 +37,7 @@ public class A0_测试kafka默认消费策略 {
         env.setParallelism(4);
 
         //TODO 默认策略 ,从未消费过从最早消费,消费过是从已有偏移量消费,并且不会提交偏移量
+        // 不需要手动设置chekpoint提交偏移量,当发现env设置了checkpoint,会自动通过checkpoint提交偏移量
         KafkaSource<String> kf= KafkaSource.<String>builder() //builder前面要指定范型方法
                 .setBootstrapServers(A1_ConfigProperty.KAFKA_SERVER)
                 .setGroupId("asdvf2222")

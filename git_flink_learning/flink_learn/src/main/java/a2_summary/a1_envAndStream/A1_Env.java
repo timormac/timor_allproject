@@ -45,11 +45,14 @@ public class A1_Env {
         //启用checkpoint，5分钟触发一次,模式是精准一次，还可以选择AT_LEAST_ONCE
         en1.enableCheckpointing(5*60*1000L, CheckpointingMode.EXACTLY_ONCE);
 
+        // 代码中用到hdfs，需要导入hadoop依赖、指定访问hdfs的用户名
+        System.setProperty("HADOOP_USER_NAME", "lpc");
 
-        //StateBackend一般都配合checkpoint使用
+        //checkpoint使用存在哪里
         en1.getCheckpointConfig().setCheckpointStorage("hdfs://project1:8020/flink_cep");
 
         //设置changelog状态后端,这样checkpoint就可以记录增量变化,保存时更快。pom导入flink-statebackend-rocksdb依赖
+        // 要求checkpoint的最大并发必须为1，其他参数建议在flink-conf配置文件中去指定
         en1.enableChangelogStateBackend(true);
         
         //源码注释:checkpoints based on the configured {@link org.apache.flink.runtime.state.CheckpointStorage},当你开启ckp会自动存到指定位置
