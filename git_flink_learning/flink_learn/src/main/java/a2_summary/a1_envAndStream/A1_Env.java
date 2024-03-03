@@ -54,7 +54,29 @@ public class A1_Env {
         //设置changelog状态后端,这样checkpoint就可以记录增量变化,保存时更快。pom导入flink-statebackend-rocksdb依赖
         // 要求checkpoint的最大并发必须为1，其他参数建议在flink-conf配置文件中去指定
         en1.enableChangelogStateBackend(true);
-        
+
+
+        /**
+         * TODO 状态后端
+         * 1、负责管理 本地状态
+         * 2、 hashmap
+         *          存在 TM的 JVM的堆内存，  读写快，缺点是存不了太多（受限与TaskManager的内存）
+         *     rocksdb
+         *          存在 TM所在节点的rocksdb数据库，存到磁盘中，  写--序列化，读--反序列化
+         *          读写相对慢一些，可以存很大的状态
+         *
+         * 3、配置方式
+         *    1）配置文件 默认值  flink-conf.yaml
+         *    2）代码中指定
+         *    3）提交参数指定
+         *    flink run-application -t yarn-application
+         *    -p 3
+         *    -Dstate.backend.type=rocksdb
+         *    -c 全类名
+         *    jar包
+         */
+
+
         //源码注释:checkpoints based on the configured {@link org.apache.flink.runtime.state.CheckpointStorage},当你开启ckp会自动存到指定位置
         //设置状态后端,当声明带状态的变量valueState时,默认是memoryStateBackend,我们要手动去指定HashMapStateBackend
         en1.setStateBackend(new HashMapStateBackend());

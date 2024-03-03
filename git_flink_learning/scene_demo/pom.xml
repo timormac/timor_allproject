@@ -21,6 +21,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-csv</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+
         <!--  导入这个，不然无法连接hdfs -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -28,6 +35,15 @@
             <version>${hadoop.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- 连入hdfs这个也要导入,不然找不到fileSink -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-files</artifactId>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <!-- flink异步io时使用-->
         <dependency>
@@ -50,6 +66,12 @@
             <groupId>com.lpc</groupId>
             <artifactId>tools_develop</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
+            <version>1.17.0</version>
+            <scope>compile</scope>
         </dependency>
 
 

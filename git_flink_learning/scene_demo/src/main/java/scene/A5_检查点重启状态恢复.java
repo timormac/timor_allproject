@@ -58,7 +58,7 @@ public class A5_检查点重启状态恢复 {
         // 6、取消作业时，checkpoint的数据 是否保留在外部系统
         // DELETE_ON_CANCELLATION:主动cancel时，删除存在外部系统的chk-xx目录 （如果是程序突然挂掉，不会删）
         // RETAIN_ON_CANCELLATION:主动cancel时，外部系统的chk-xx目录会保存下来
-        checkpointConfig.setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+       // checkpointConfig.setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // 7、允许 checkpoint 连续失败的次数，默认0--》表示checkpoint一失败，job就挂掉
         checkpointConfig.setTolerableCheckpointFailureNumber(10);
 

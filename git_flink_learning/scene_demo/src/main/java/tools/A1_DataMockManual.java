@@ -21,6 +21,7 @@ public class A1_DataMockManual {
 
         while (true){
 
+
             ArrayList<Dao> order_list = new ArrayList<Dao>();
             Mock_Order mock_order = new Mock_Order();
             mock_order.mock();
@@ -32,14 +33,14 @@ public class A1_DataMockManual {
             order_list.clear();
             Thread.sleep(100);
 
-//            ArrayList<Dao> cupon_list = new ArrayList<Dao>();
-//            Mock_Cupon mock_cupon = new Mock_Cupon();
-//            mock_cupon.mock(mock_order.orderno);
-//            System.out.println(mock_cupon);
-//            cupon_list.add(mock_cupon);
-//            A1_MysqlTool.insertTableDaoList(connect, "mock_cupon", Mock_Cupon.class.getName(), cupon_list);
-//            cupon_list.clear();
-//            Thread.sleep(1000);
+            ArrayList<Dao> cupon_list = new ArrayList<Dao>();
+            Mock_Cupon mock_cupon = new Mock_Cupon();
+            mock_cupon.mock(mock_order.orderno);
+            System.out.println(mock_cupon);
+            cupon_list.add(mock_cupon);
+            A1_MysqlTool.insertTableDaoList(connect, "mock_cupon", Mock_Cupon.class.getName(), cupon_list);
+            cupon_list.clear();
+            Thread.sleep(200);
 
         }
     }

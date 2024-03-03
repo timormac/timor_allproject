@@ -88,32 +88,35 @@ public class A1_KeyedState {
         });
 
     }
-}
 
-//TODO 功能求平均数 ，泛型<In,Middle,Result>
-class UdfAgg implements AggregateFunction<Integer, Tuple2<Integer, Integer>, Double>{
 
-    //初始的第一个Middle如何定义的
-    public Tuple2<Integer, Integer> createAccumulator() {
-        return Tuple2.of(0, 0);
+
+    //TODO 功能求平均数 ，泛型<In,Middle,Result>
+   static class UdfAgg implements AggregateFunction<Integer, Tuple2<Integer, Integer>, Double>{
+
+        //初始的第一个Middle如何定义的
+        public Tuple2<Integer, Integer> createAccumulator() {
+            return Tuple2.of(0, 0);
+        }
+
+        //一个数据和初始middle处理，更新middle，后续再和中间middle处理
+        public Tuple2<Integer, Integer> add(Integer value, Tuple2<Integer, Integer> accumulator) {
+            accumulator.f0 =  accumulator.f0+1;
+            accumulator.f1 = accumulator.f1 +value;
+            return accumulator;
+        }
+
+        @Override
+        public Double getResult(Tuple2<Integer, Integer> accumulator) {
+
+            return (double)(accumulator.f1/accumulator.f0);
+        }
+
+        @Override
+        public Tuple2<Integer, Integer> merge(Tuple2<Integer, Integer> a, Tuple2<Integer, Integer> b) {
+            return null;
+        }
     }
 
-    //一个数据和初始middle处理，更新middle，后续再和中间middle处理
-    public Tuple2<Integer, Integer> add(Integer value, Tuple2<Integer, Integer> accumulator) {
-        accumulator.f0 =  accumulator.f0+1;
-        accumulator.f1 = accumulator.f1 +value;
-        return accumulator;
-    }
-
-    @Override
-    public Double getResult(Tuple2<Integer, Integer> accumulator) {
-
-        return (double)(accumulator.f1/accumulator.f0);
-    }
-
-    @Override
-    public Tuple2<Integer, Integer> merge(Tuple2<Integer, Integer> a, Tuple2<Integer, Integer> b) {
-        return null;
-    }
 }
 

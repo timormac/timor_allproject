@@ -30,7 +30,7 @@ import org.apache.flink.util.Collector;
  * @Date 2024/2/24 21:39
  * @Version 1.0
  */
-public class A2_双流JoinConnect实现 {
+public class A2_双流关联Connect实现 {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());

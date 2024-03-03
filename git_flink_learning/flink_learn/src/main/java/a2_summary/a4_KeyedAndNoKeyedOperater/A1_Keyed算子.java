@@ -3,8 +3,10 @@ package a2_summary.a4_KeyedAndNoKeyedOperater;
 import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
+import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 
 import java.util.Arrays;
 
@@ -29,7 +31,7 @@ public class A1_Keyed算子 {
         /**
          * keyedby自己独有的方法
          */
-        //intervaljoin这个流。源码内部存2个keyed流
+        //TODO intervaljoin这个流。源码内部存2个keyed流
         KeyedStream.IntervalJoin<String, String, String> interval = keyBy1.intervalJoin(keyBy2);
         KeyedStream.IntervalJoined<String, String, String> joined = interval.between(Time.seconds(5), Time.minutes(5));
 
@@ -38,7 +40,8 @@ public class A1_Keyed算子 {
                 .process(null);//关联到的数据，放入process
 
 
-        keyBy1.window(null);
+        WindowedStream<String, String, Window> window = keyBy1.window(null);
+
         keyBy1.countWindow(1,2);
 
 
