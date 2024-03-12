@@ -9,7 +9,7 @@ import a2_summary.a0_Enums.KafkaOffsetEnum;
  * @Date 2024/2/28 16:26
  * @Version 1.0
  */
-public class a0_SQLConnect {
+public class A0_SQLConnect {
 
     public static String kafkaSourceDDL(String topic, String groupid, KafkaOffsetEnum mode, KafkaFormatEnum format){
         String sql =" WITH (\n" +
@@ -26,7 +26,7 @@ public class a0_SQLConnect {
 
 
     public  static String kafkaSourceDDL(String topic,String groupid){
-        return  kafkaSourceDDL(topic,groupid, KafkaOffsetEnum.LATEST,KafkaFormatEnum.CSV);
+        return  kafkaSourceDDL(topic,groupid, KafkaOffsetEnum.LATEST,KafkaFormatEnum.JSON);
     }
 
 

@@ -161,7 +161,7 @@ public class A1_MysqlTool {
             }
         }
 
-        System.out.println( sql );
+       // System.out.println( sql );
 
         //这里先传sql,mysl服务器会对这个sql预编译
         PreparedStatement pst = connect.prepareStatement(sql);

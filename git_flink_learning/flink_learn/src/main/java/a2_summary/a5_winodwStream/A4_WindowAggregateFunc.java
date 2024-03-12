@@ -46,30 +46,35 @@ public class A4_WindowAggregateFunc {
         SingleOutputStreamOperator<Decimal> aggregate = win2.aggregate(new TmpAgg(), new TmpProcess());
 
     }
+
+    static class TmpAgg implements AggregateFunction<String, A4_POJO,Integer>{
+        @Override
+        public A4_POJO createAccumulator() {
+            return null;
+        }
+        @Override
+        public A4_POJO add(String value, A4_POJO accumulator) {
+            return null;
+        }
+        @Override
+        public Integer getResult(A4_POJO accumulator) {
+            return null;
+        }
+        @Override
+        public A4_POJO merge(A4_POJO a, A4_POJO b) {
+            return null;
+        }
+    }
+
+
+    static class TmpProcess extends ProcessAllWindowFunction<Integer, Decimal, GlobalWindow> {
+        @Override
+        public void process(ProcessAllWindowFunction<Integer, Decimal, GlobalWindow>.Context context, Iterable<Integer> elements, Collector<Decimal> out) throws Exception {
+
+        }
+    }
+
 }
 
-class TmpAgg implements AggregateFunction<String, A4_POJO,Integer>{
-    @Override
-    public A4_POJO createAccumulator() {
-        return null;
-    }
-    @Override
-    public A4_POJO add(String value, A4_POJO accumulator) {
-        return null;
-    }
-    @Override
-    public Integer getResult(A4_POJO accumulator) {
-        return null;
-    }
-    @Override
-    public A4_POJO merge(A4_POJO a, A4_POJO b) {
-        return null;
-    }
-}
 
-class TmpProcess extends ProcessAllWindowFunction<Integer, Decimal, GlobalWindow> {
-    @Override
-    public void process(ProcessAllWindowFunction<Integer, Decimal, GlobalWindow>.Context context, Iterable<Integer> elements, Collector<Decimal> out) throws Exception {
 
-    }
-}

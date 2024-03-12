@@ -1,6 +1,8 @@
 package c1_collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -17,7 +19,9 @@ public class A2_List {
 
 
        List<String>  list = new  ArrayList<String>();
-       //添加元素
+
+
+        //添加元素
        list.add("aa");
        //指定位置添加元素
        list.add(2,"bb");
@@ -28,9 +32,23 @@ public class A2_List {
        //修改下标对应元素
        list.set(1,"bb");
 
+       //排序,传一个Comparator,注意compareTO返回的是-1,0,1
+       list.sort(new Comparator<String>() {
+           @Override
+           public int compare(String o1, String o2) {
+               return o1.compareTo(o2);
+           }
+       });
 
 
-       //还有Vector,Stack,LinkedList都是List接口的实现类
+
+       //TODO Arrays,将int[]转为List,再新建一个new Arrlist( list )，就可以了
+        Integer[]  arr = new Integer[]{1,2,3};
+        List<Integer> integers = Arrays.asList(arr);
+        ArrayList<Integer> arrList = new ArrayList<>(integers);
+
+
+        //还有Vector,Stack,LinkedList都是List接口的实现类
         // Vector相比ArrayList 线程安全，效率低
         //stack比List多出pop,push弹栈，压栈方法
         //LinkedList是链表结构，方便元属添加，删除

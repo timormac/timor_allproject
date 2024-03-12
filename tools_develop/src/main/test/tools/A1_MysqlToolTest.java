@@ -1,7 +1,8 @@
-package lpc.utils.mysql.tools;
+package tools;
 
 import lpc.utils.mysql.dao.Dao;
 import lpc.utils.mysql.dao.Mock_Order;
+import lpc.utils.mysql.tools.A1_MysqlTool;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

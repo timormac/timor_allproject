@@ -1,5 +1,6 @@
 package a2_summary.a4_KeyedAndNoKeyedOperater;
 
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -26,7 +27,6 @@ public class A1_Keyed算子 {
 
         KeyedStream<String, String> keyBy1 = ds1.keyBy(s -> s);
         KeyedStream<String, String> keyBy2 = ds2.keyBy(s -> s);
-
 
         /**
          * keyedby自己独有的方法

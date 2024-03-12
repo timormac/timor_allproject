@@ -1,5 +1,6 @@
 package a2_summary.a8_sql;
 
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
@@ -14,7 +15,7 @@ public class A2_2个kafka流关联 {
 
     public static void main(String[] args) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         String kf_conn = "CREATE TABLE kafka_maxwell( \n" +

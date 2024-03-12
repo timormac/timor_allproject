@@ -1,6 +1,5 @@
 package a2_summary.b1_test;
 
-import a2_summary.a8_sql.tools.a0_SQLConnect;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lpc.utils.mysql.tools.A1_ConfigProperty;
