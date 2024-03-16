@@ -9,7 +9,7 @@ import java.util.Map;
  * @Date 2024/2/24 18:55
  * @Version 1.0
  */
- abstract class AbsctractMockDao  implements Dao,Mocked{
+ public abstract class AbsctractMockDao  implements Dao,Mocked{
 
     @Override
     public Dao getInstance(Map<String, Object> map) throws IllegalAccessException {

@@ -37,6 +37,7 @@ public class A2_2个kafka流关联 {
 
 
         Table mock_order = tableEnv.sqlQuery("select data from kafka_maxwell where `table` = 'mock_order' ");
+
         Table mock_cupon = tableEnv.sqlQuery("select data from kafka_maxwell where `table` = 'mock_cupon' ");
 
         tableEnv.createTemporaryView("mock_order",mock_order);

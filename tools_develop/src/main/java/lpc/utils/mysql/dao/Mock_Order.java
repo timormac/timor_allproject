@@ -28,9 +28,10 @@ public class Mock_Order extends AbsctractMockDao{
         Random random = new Random();
         long l = System.currentTimeMillis();
         orderno = "D" + String.valueOf(l).substring(4)+"|"+random.nextInt(10);
-        userid = "user" + random.nextInt(101);
+        //userid = "user" + random.nextInt(101);
+        userid = "user" + random.nextInt(10);
         //spuid = random.nextInt(101); // 生成一个0到100之间的随机整数
-        spuid = random.nextInt(10); // 生成一个0到100之间的随机整数
+        spuid = random.nextInt(2); // 生成一个0到100之间的随机整数
         price = random.nextDouble()*1000;
         create_time = new Timestamp(l);
         status=random.nextInt(3);

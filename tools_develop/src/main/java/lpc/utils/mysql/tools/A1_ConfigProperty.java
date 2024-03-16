@@ -8,8 +8,10 @@ package lpc.utils.mysql.tools;
 public class A1_ConfigProperty {
 
     public  static  final  String  HBASE_SERVER ="project1,project2,project3";
-    public  static  final  String  KAFKA_SERVER = "project1:9092,project2:9092,project3:9092";
-    public  static  final  String  ZOOKEEPER_SERVER = "project1,project2,project3";
+    //public  static  final  String  KAFKA_SERVER = "project1:9092,project2:9092,project3:9092";
+    public  static  final  String  KAFKA_SERVER = "localhost:9092";
+   // public  static  final  String  ZOOKEEPER_SERVER = "project1,project2,project3";
+    public  static  final  String  ZOOKEEPER_SERVER = "localhost";
     public static final String HDFS_PATH  = "hdfs://project1:8020";
 
     // Phoenix驱动
@@ -18,9 +20,13 @@ public class A1_ConfigProperty {
 
 
     //mysql
-    public  static  final  String  MYSQL_URL = "jdbc:mysql://project1:3306/flink_warehouse_db?useUnicode=true&characterEncoding=utf8";
+    //public  static  final  String  MYSQL_URL = "jdbc:mysql://project1:3306/flink_warehouse_db?useUnicode=true&characterEncoding=utf8";
+    public  static  final  String  MYSQL_URL = "jdbc:mysql://localhost:3306/flink_warehouse_db?useUnicode=true&characterEncoding=utf8";
     public  static  final  String  MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     public  static  final  String  MYSQL_USER = "root";
-    public  static  final  String  MYSQL_PASSWORD = "121995";
+
+    //public  static  final  String  MYSQL_PASSWORD = "121995";
+    public  static  final  String  MYSQL_PASSWORD = "lpc19950419";
+
 
 }

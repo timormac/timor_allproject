@@ -1,7 +1,10 @@
 package lpc.utils.mysql;
 
 import lpc.utils.mysql.dao.Mock_Cupon;
+import lpc.utils.mysql.tools.A1_MysqlTool;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Random;
 
 /**
@@ -10,16 +13,13 @@ import java.util.Random;
  * @Version 1.0
  */
 public class D_Test {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
 
-        for (int i = 0; i < 2; i++) {
-
-            Mock_Cupon mock_cupon = new Mock_Cupon();
-            mock_cupon.mock("1");
-            System.out.println(mock_cupon);
-
-        }
-
+//        Connection poolConnect = A1_MysqlTool.getPoolConnect();
+//
+//
+//        A1_MysqlTool.tableToObjectCode(poolConnect,"rt_crhkh_crh_wskh_userqueryextinfo");
+        System.out.println("user_id".toUpperCase());
 
     }
 }

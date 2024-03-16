@@ -51,6 +51,14 @@
         </dependency>
 
 
+        <!-- 解析sql -->
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.32.0</version>
+        </dependency>
+
+
     </dependencies>
 
 

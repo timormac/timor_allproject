@@ -161,7 +161,7 @@ public class A1_MysqlTool {
             }
         }
 
-       // System.out.println( sql );
+      // System.out.println( sql );
 
         //这里先传sql,mysl服务器会对这个sql预编译
         PreparedStatement pst = connect.prepareStatement(sql);
@@ -198,7 +198,7 @@ public class A1_MysqlTool {
         pst.close();
     }
 
-    //获取mysql表,映射类的代码
+    //获取mysql表,映射类的代码,减少手动创建dao类的代码，直接复制黏贴
     public static void tableToObjectCode(Connection connect, String tb) throws Exception {
 
         HashMap<String, String> map = getTableColume(connect, tb);
