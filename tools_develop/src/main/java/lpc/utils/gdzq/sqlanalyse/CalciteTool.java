@@ -1,4 +1,4 @@
-package lpc.utils.sqlanalyse;
+package lpc.utils.gdzq.sqlanalyse;
 
 import org.apache.calcite.config.Lex;
 import org.apache.calcite.sql.SqlIdentifier;
@@ -8,35 +8,71 @@ import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.util.SqlShuttle;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 /**
- * @Title: A1_Tools
- * @Package: lpc.utils.sqlanalyse
+ * @Title: CalsitTool
+ * @Package: lpc.utils.gdzq.sqlanalyse
  * @Description:
  * @Author: lpc
- * @Date: 2024/3/15 16:05
+ * @Date: 2024/3/17 11:05
  * @Version:1.0
  */
-public class A1_Tools {
+public class CalciteTool {
+    public static void main(String[] args) throws IOException {
 
-    //获取sql中用到的表，以及表用到的字段
-    static Map<String, Set<String> > getTableColume(String sql){
+        String path = "/Users/timor/Desktop/未命名文件夹/元数据变更风险评估.csv";
+        String colName = "custom_sql";
+        ArrayList<String> columeList = CSVTool.getColumeList(path, colName);
+
+        String str = columeList.get(0);
+
+        //替换掉${begin}等参数
+        String pattern = "\\$\\{[^}]*\\}";
+        String newSQL = str.replaceAll(pattern, "1");
+
+        //替换掉;号
+        String resultSQL = newSQL.replaceAll(";", "");
+
+        resultSQL = "SELECT a.name, b.salary FROM employee a INNER JOIN department b ON a.dep_id = b.id WHERE a.age > 30";
+
+        //System.out.println(resultSQL);
+
+        Map<String, Set<String>> map = getTableColumeTest(resultSQL);
+
+        for (String key : map.keySet()) {
+
+            String res = key + ":";
+
+            for (String col : map.get(key)) {
+                res+= col + ", ";
+            }
+            System.out.println( res );
+        }
+
+        //TODO 目前的问题是把库识别成了表,然后表都是用的别名，识别不出来原名字
 
 
         /**
-         * sql处理;,处理${}
-         * 并且map输出 有临时表a,t等,并且还有个空
+         * :P1, SUBMIT_DATE_TIME, STATUS, T, OP_BRANCH_NAME,
+         * P1:BRANCH_NO, BRANCH_NAME,
+         * REALTIME:RT_CRHKH_CRH_SBC_ACCEPTANCE,
+         * T:OP_BRANCH_NO, SUBMIT_DATE_TIME, STATUS, FUND_ACCOUNT, BUSINFLOW_NO, AUDIT_ROLE_IDS,
+         * STAGING:CRHKH_CRH_USER_ALLBRANCH, CRHKH_CRH_HIS_HIS_ACCEPTANCE,
          */
 
 
+    }
+
+
+    static Map<String, Set<String>> getTableColumeTest(String sql){
+
         SqlParser.Config parserConfig = SqlParser.configBuilder()
-                .setLex(Lex.ORACLE) // 设置Oracle的引用标识符的词法处理
-                .setConformance(SqlConformanceEnum.ORACLE_10) // 设置遵循Oracle 12c及以上版本的SQL方言
+                .setLex(Lex.ORACLE) // 设置为Oracle语法
+                .setConformance(SqlConformanceEnum.ORACLE_10) // 设置遵循Oracle版本
                 .build();
+
         SqlParser parser = SqlParser.create(sql, parserConfig);
 
         TableFieldExtractor extractor = null;
@@ -60,6 +96,7 @@ public class A1_Tools {
 
     }
 
+
     private static class TableFieldExtractor extends SqlShuttle {
         private Map<String, Set<String> > tableFields = new HashMap<>();
 
@@ -81,5 +118,7 @@ public class A1_Tools {
             return super.visit(id);
         }
     }
+
+
 
 }

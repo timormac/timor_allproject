@@ -1,4 +1,4 @@
-package demand;
+package demos;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -7,14 +7,15 @@ import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 /**
- * @Title: A2_消费kafka数据查验
- * @Package: demand
+ * @Title: A3_test3
+ * @Package: demos
  * @Description:
  * @Author: lpc
- * @Date: 2024/3/16 09:09
+ * @Date: 2024/3/14 14:20
  * @Version:1.0
  */
-public class A2_消费kafka数据查验 {
+public class A3_窗口排序和groupby连用效果 {
+
     public static void main(String[] args) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
@@ -51,6 +52,11 @@ public class A2_消费kafka数据查验 {
                 "data['client_name'] as client_name , " +
                 "data['id_no'] as id_no , " +
                 "data['birthday'] as birthday  ," +
+
+                "CURRENT_TIMESTAMP as  ddd_timestamp," +
+                "CURRENT_TIME as ddd_time ," +
+                "CURRENT_DATE as ddd_date ," +
+
                 "data['request_no'] as request_no  " +
                 " from kafka_maxwell" +
                 " where `table` = 'rt_crhkh_crh_wskh_userqueryextinfo' ";
@@ -60,53 +66,46 @@ public class A2_消费kafka数据查验 {
         //创建中间视图
         tableEnv.executeSql(sink_stream_crhkh_crh_wskh_mid_sql);
 
-        String excute_sql = "" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    business_flag_last,\n" +
-                "    last_update_detetime,\n" +
-                "    rn\n" +
+
+        //TODO group by字段 如果没有last_update_detetime,那么开窗中用到了last_update_detetime,会报错：'last_update_detetime' is not being grouped
+//        String excute_sql = "select \n" +
+//                "user_id,\n" +
+//                "mobile_tel,\n" +
+//                "client_name,\n" +
+//                "row_number()over( partition by  user_id,mobile_tel  order by last_update_detetime ) as rk\n" +
+//                "from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+//                "group by user_id,mobile_tel,client_name";
+
+//
+//        String excute_sql="SELECT \n" +
+//                "user_id,\n" +
+//                "mobile_tel,\n" +
+//                "last_update_detetime ,\n" +
+//                "ROW_NUMBER() OVER(PARTITION BY user_id, mobile_tel order by last_update_detetime) rn\n" +
+//                "from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+//                "group by user_id,mobile_tel,last_update_detetime";
+
+
+        String excute_sql="select \n" +
+                "*\n" +
                 "from (\n" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    branch_no,\n" +
-                "    business_flag_last,\n" +
-                "    channel_code,\n" +
-                "    last_update_detetime,\n" +
+                "\n" +
+                "    SELECT \n" +
                 "    user_id,\n" +
-                "    id_no,\n" +
-                "    birthday,\n" +
-                "    request_no,\n" +
-                "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn\n " +
-                "from rt_crhkh_crh_wskh_userqueryextinfo              \n" +
-                "where request_status in ('0')                         --状态：0-申请中 \n" +
-                ") t \n" +
-                "where t.rn < 3";
-
-//       String excute_sql = "select  \n" +
-//               "mobile_tel, \n" +
-//               "business_flag_last, \n" +
-//               "last_update_detetime, \n" +
-//               "rn \n" +
-//               "from( \n" +
-//               "    SELECT \n" +
-//               "    mobile_tel, \n" +
-//               "    business_flag_last, \n" +
-//               "    last_update_detetime, \n" +
-//               "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn \n" +
-//               "    from rt_crhkh_crh_wskh_userqueryextinfo \n" +
-//               ") t \n" +
-//               "where t.rn < 3";
-
-
+                "    mobile_tel,\n" +
+                "    last_update_detetime ,\n" +
+                "    ROW_NUMBER() OVER(PARTITION BY user_id, mobile_tel order by last_update_detetime) rn\n" +
+                "    from rt_crhkh_crh_wskh_userqueryextinfo \n" +
+                "    group by user_id,mobile_tel,last_update_detetime\n" +
+                ")\n" +
+                "where rn = 1";
 
         System.out.println( excute_sql);
 
         TableResult tableResult = tableEnv.executeSql(excute_sql);
 
         tableResult.print();
+
 
 
     }

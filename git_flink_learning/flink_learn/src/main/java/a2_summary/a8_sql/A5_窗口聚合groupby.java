@@ -16,18 +16,18 @@ public class A5_窗口聚合groupby {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-
-        String kf_conn_sql = "CREATE TABLE kafka_maxwell( \n" +
-                "`database` string, " +
-                "`table` string, " +
-                "`data` map<string, string>, " +
-                "`type` string, " +
-                "`ts` string "+ A0_SQLConnect.kafkaSourceDDL("maxwell","lpc");
-
-        tableEnv.executeSql(kf_conn_sql);
-
-
-        tableEnv.sqlQuery()
+//
+//        String kf_conn_sql = "CREATE TABLE kafka_maxwell( \n" +
+//                "`database` string, " +
+//                "`table` string, " +
+//                "`data` map<string, string>, " +
+//                "`type` string, " +
+//                "`ts` string "+ A0_SQLConnect.kafkaSourceDDL("maxwell","lpc");
+//
+//        tableEnv.executeSql(kf_conn_sql);
+//
+//
+//        tableEnv.sqlQuery();
 
     }
 }

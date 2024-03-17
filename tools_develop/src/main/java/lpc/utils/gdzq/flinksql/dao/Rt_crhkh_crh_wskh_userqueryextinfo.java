@@ -1,4 +1,4 @@
-package lpc.utils.gdzq.dao;
+package lpc.utils.gdzq.flinksql.dao;
 
 import com.alibaba.fastjson.JSONObject;
 import lpc.utils.mysql.dao.AbsctractMockDao;
@@ -41,7 +41,8 @@ public class Rt_crhkh_crh_wskh_userqueryextinfo extends AbsctractMockDao {
         this.request_status = json.getString("request_status".toUpperCase());
         this.submit_datetime = json.getString("submit_datetime".toUpperCase());
         this.channel_code = json.getString("channel_code".toUpperCase());
-        this.last_update_detetime = json.getString("last_update_datetime".toUpperCase());
+        //this.last_update_detetime = json.getString("last_update_datetime".toUpperCase());
+        this.last_update_detetime = strings[1];
         this.client_name = json.getString("client_name".toUpperCase());
         this.id_no = json.getString("id_no".toUpperCase());
         this.birthday = json.getString("birthday".toUpperCase());

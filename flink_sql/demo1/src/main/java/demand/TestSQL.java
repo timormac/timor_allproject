@@ -2,19 +2,19 @@ package demand;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 /**
- * @Title: A2_消费kafka数据查验
+ *@Title: TestSQL
  * @Package: demand
  * @Description:
  * @Author: lpc
- * @Date: 2024/3/16 09:09
+ * @Date: 2024/3/16 15:28
  * @Version:1.0
  */
-public class A2_消费kafka数据查验 {
+public class TestSQL {
+
     public static void main(String[] args) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
@@ -60,53 +60,27 @@ public class A2_消费kafka数据查验 {
         //创建中间视图
         tableEnv.executeSql(sink_stream_crhkh_crh_wskh_mid_sql);
 
-        String excute_sql = "" +
-                "SELECT\n" +
-                "    client_name,\n" +
+        String excute_sql = "select \n" +
+                "mobile_tel,\n" +
+                "business_flag_last,\n" +
+                "last_update_detetime,\n" +
+                "rn\n" +
+                "from(\n" +
+                "    SELECT\n" +
                 "    mobile_tel,\n" +
                 "    business_flag_last,\n" +
                 "    last_update_detetime,\n" +
-                "    rn\n" +
-                "from (\n" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    branch_no,\n" +
-                "    business_flag_last,\n" +
-                "    channel_code,\n" +
-                "    last_update_detetime,\n" +
-                "    user_id,\n" +
-                "    id_no,\n" +
-                "    birthday,\n" +
-                "    request_no,\n" +
-                "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn\n " +
-                "from rt_crhkh_crh_wskh_userqueryextinfo              \n" +
-                "where request_status in ('0')                         --状态：0-申请中 \n" +
-                ") t \n" +
-                "where t.rn < 3";
-
-//       String excute_sql = "select  \n" +
-//               "mobile_tel, \n" +
-//               "business_flag_last, \n" +
-//               "last_update_detetime, \n" +
-//               "rn \n" +
-//               "from( \n" +
-//               "    SELECT \n" +
-//               "    mobile_tel, \n" +
-//               "    business_flag_last, \n" +
-//               "    last_update_detetime, \n" +
-//               "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn \n" +
-//               "    from rt_crhkh_crh_wskh_userqueryextinfo \n" +
-//               ") t \n" +
-//               "where t.rn < 3";
-
-
+                "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn\n" +
+                "    from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+                ")\n" +
+                "where rn <= 3 ";
 
         System.out.println( excute_sql);
 
         TableResult tableResult = tableEnv.executeSql(excute_sql);
 
         tableResult.print();
+
 
 
     }

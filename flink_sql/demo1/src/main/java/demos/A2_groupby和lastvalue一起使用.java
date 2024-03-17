@@ -1,21 +1,23 @@
-package demand;
+package demos;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 /**
- * @Title: A2_消费kafka数据查验
- * @Package: demand
+ * @Title: A2_groupby和lastvalue一起使用
+ * @Package: demos
  * @Description:
  * @Author: lpc
- * @Date: 2024/3/16 09:09
+ * @Date: 2024/3/17 07:42
  * @Version:1.0
  */
-public class A2_消费kafka数据查验 {
+public class A2_groupby和lastvalue一起使用 {
+
+
     public static void main(String[] args) {
+
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
@@ -60,46 +62,21 @@ public class A2_消费kafka数据查验 {
         //创建中间视图
         tableEnv.executeSql(sink_stream_crhkh_crh_wskh_mid_sql);
 
-        String excute_sql = "" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    business_flag_last,\n" +
-                "    last_update_detetime,\n" +
-                "    rn\n" +
-                "from (\n" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    branch_no,\n" +
-                "    business_flag_last,\n" +
-                "    channel_code,\n" +
-                "    last_update_detetime,\n" +
-                "    user_id,\n" +
-                "    id_no,\n" +
-                "    birthday,\n" +
-                "    request_no,\n" +
-                "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn\n " +
-                "from rt_crhkh_crh_wskh_userqueryextinfo              \n" +
-                "where request_status in ('0')                         --状态：0-申请中 \n" +
-                ") t \n" +
-                "where t.rn < 3";
+        //TODO group by + last_value, 和max()差不多,每来一条数据,就会更新，而且是个回撤流
+//        String excute_sql = "select \n" +
+//                "mobile_tel,\n" +
+//                "user_id,\n" +
+//                "last_value(last_update_detetime) as last_update_detetime\n" +
+//                "from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+//                "group by mobile_tel,user_id";
 
-//       String excute_sql = "select  \n" +
-//               "mobile_tel, \n" +
-//               "business_flag_last, \n" +
-//               "last_update_detetime, \n" +
-//               "rn \n" +
-//               "from( \n" +
-//               "    SELECT \n" +
-//               "    mobile_tel, \n" +
-//               "    business_flag_last, \n" +
-//               "    last_update_detetime, \n" +
-//               "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn \n" +
-//               "    from rt_crhkh_crh_wskh_userqueryextinfo \n" +
-//               ") t \n" +
-//               "where t.rn < 3";
-
+        //TODO first_value, 只输出一条,就是第一条来的数据,后序数据都被过滤掉了
+        String excute_sql = "select \n" +
+                "mobile_tel,\n" +
+                "user_id,\n" +
+                "first_value(last_update_detetime) as last_update_detetime\n" +
+                "from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+                "group by mobile_tel,user_id";
 
 
         System.out.println( excute_sql);
@@ -110,4 +87,5 @@ public class A2_消费kafka数据查验 {
 
 
     }
+
 }

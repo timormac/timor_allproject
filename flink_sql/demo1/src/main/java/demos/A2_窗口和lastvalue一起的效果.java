@@ -1,4 +1,4 @@
-package demand;
+package demos;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -7,14 +7,14 @@ import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 /**
- * @Title: A2_消费kafka数据查验
- * @Package: demand
+ * @Title: A2_开户需求
+ * @Package: demos
  * @Description:
  * @Author: lpc
- * @Date: 2024/3/16 09:09
+ * @Date: 2024/3/13 20:55
  * @Version:1.0
  */
-public class A2_消费kafka数据查验 {
+public class A2_窗口和lastvalue一起的效果 {
     public static void main(String[] args) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
@@ -60,46 +60,17 @@ public class A2_消费kafka数据查验 {
         //创建中间视图
         tableEnv.executeSql(sink_stream_crhkh_crh_wskh_mid_sql);
 
-        String excute_sql = "" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    business_flag_last,\n" +
-                "    last_update_detetime,\n" +
-                "    rn\n" +
-                "from (\n" +
-                "SELECT\n" +
-                "    client_name,\n" +
-                "    mobile_tel,\n" +
-                "    branch_no,\n" +
-                "    business_flag_last,\n" +
-                "    channel_code,\n" +
-                "    last_update_detetime,\n" +
-                "    user_id,\n" +
-                "    id_no,\n" +
-                "    birthday,\n" +
-                "    request_no,\n" +
-                "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn\n " +
-                "from rt_crhkh_crh_wskh_userqueryextinfo              \n" +
-                "where request_status in ('0')                         --状态：0-申请中 \n" +
-                ") t \n" +
-                "where t.rn < 3";
-
-//       String excute_sql = "select  \n" +
-//               "mobile_tel, \n" +
-//               "business_flag_last, \n" +
-//               "last_update_detetime, \n" +
-//               "rn \n" +
-//               "from( \n" +
-//               "    SELECT \n" +
-//               "    mobile_tel, \n" +
-//               "    business_flag_last, \n" +
-//               "    last_update_detetime, \n" +
-//               "    ROW_NUMBER() OVER(PARTITION BY mobile_tel,business_flag_last,channel_code,to_date(last_update_detetime) order by last_update_detetime) rn \n" +
-//               "    from rt_crhkh_crh_wskh_userqueryextinfo \n" +
-//               ") t \n" +
-//               "where t.rn < 3";
-
+        //TODO 结果展示 窗口关后闭时，获取最后一条数据了,也就是说每个窗口只返回一条数据
+        String excute_sql = "SELECT \n" +
+                "mobile_tel,\n" +
+                "user_id,\n" +
+                "last_value(last_update_detetime) as last_update_detetime,\n" +
+                "last_value(client_name) as client_name,\n" +
+                "last_value(business_flag_last)  as business_flag_last,\n" +
+                "TUMBLE_START(PROCTIME(), INTERVAL '20' SECOND) as ws_start,\n" +
+                "TUMBLE_END(PROCTIME(), INTERVAL '20' SECOND) as ws_end\n" +
+                "from rt_crhkh_crh_wskh_userqueryextinfo\n" +
+                "group by TUMBLE(PROCTIME(), INTERVAL '20' SECOND),mobile_tel,user_id";
 
 
         System.out.println( excute_sql);
@@ -107,7 +78,6 @@ public class A2_消费kafka数据查验 {
         TableResult tableResult = tableEnv.executeSql(excute_sql);
 
         tableResult.print();
-
 
     }
 }

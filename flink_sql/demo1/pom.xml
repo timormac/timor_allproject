@@ -68,6 +68,13 @@
             <version>1.12.0</version>
         </dependency>
 
+        <!-- 连接jdbc的mysql -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc_2.12</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+
 
         <!-- 不引入这个,创建kafka的表时会报错找不到json -->
         <dependency>
