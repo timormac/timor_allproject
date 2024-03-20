@@ -1,4 +1,4 @@
-package lpc.utils.gdzq.sqlanalyse;
+package a1_sql_analyse;
 
 import org.apache.calcite.config.Lex;
 import org.apache.calcite.sql.SqlIdentifier;

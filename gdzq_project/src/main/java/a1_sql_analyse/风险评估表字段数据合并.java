@@ -1,8 +1,11 @@
-package lpc.utils.gdzq.sqlanalyse;
+package a1_sql_analyse;
 
 import com.opencsv.CSVWriter;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -18,7 +21,6 @@ public class 风险评估表字段数据合并 {
 
     public static void main(String[] args) throws IOException {
 
-        //String fileName = "/Users/timor/Desktop/未命名文件夹/123";
         String fileName = "/Users/timor/Desktop/未命名文件夹/表涉及字段";
         BufferedReader br = new BufferedReader(new FileReader(fileName));
 
@@ -33,14 +35,19 @@ public class 风险评估表字段数据合并 {
             //过滤掉数字和空行
             if(split.length==2){
                 //库/表名统一大写,表/库的""去掉,把多余的空格去掉
-                String tableName = split[0].toUpperCase().replace("\"","").replace(" ","");
+                String tempName = split[0].toUpperCase().replace("\"","").replace(" ","");
+
+                String[] tbSplit = tempName.split("\\.");
+                String tableName = tbSplit.length==1 ? tbSplit[0]:tbSplit[1];
+                //System.out.println(tableName);
+
                 String[] fieldArr = split[1].split(",");
 
                 if( !map.containsKey(tableName) ){
                     HashSet<String> set = new HashSet<>();
                     for (String field : fieldArr) {
                         //去掉字段空格
-                        set.add(field.replace(" ",""));
+                        set.add(field.replace(" ","").toUpperCase());
                     }
                     map.put(tableName,set);
 
@@ -48,7 +55,7 @@ public class 风险评估表字段数据合并 {
                     HashSet<String> set = map.get(tableName);
                     for (String field : fieldArr) {
                         //去掉字段空格
-                        set.add(field.replace(" ",""));
+                        set.add(field.replace(" ","").toUpperCase());
                     }
                 }
             }
@@ -66,25 +73,6 @@ public class 风险评估表字段数据合并 {
             }
         }
 
-
-        for (String table : needMap.keySet()) {
-            String res = table + " : ";
-            HashSet<String> set = needMap.get(table);
-
-            int flag = 0 ;
-
-            for (String feild : set) {
-                flag +=1 ;
-                if(  flag < set.size() ){
-                    res += feild + "," ;
-                }else {
-                    res += feild;
-                }
-            }
-
-           // System.out.println(res);
-
-        }
 
 
         String csvFile = "/Users/timor/Desktop/未命名文件夹/接口所用列.csv";
@@ -111,7 +99,6 @@ public class 风险评估表字段数据合并 {
 
             arr[0] = table;
             arr[1] = fields;
-            System.out.println(arr);
             writer.writeNext( arr);
         }
         writer.close();

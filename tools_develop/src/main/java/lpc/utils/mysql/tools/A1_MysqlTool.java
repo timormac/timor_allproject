@@ -53,6 +53,7 @@ public class A1_MysqlTool {
 
     }
 
+
     //获取mysql线程池连接
     public static Connection getPoolConnect() throws SQLException {
         System.out.println("获取mysql连接");

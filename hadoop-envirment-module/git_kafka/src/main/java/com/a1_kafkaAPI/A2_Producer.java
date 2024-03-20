@@ -4,11 +4,9 @@ import com.utils.A1_Config;
 import com.utils.A2_KafkaUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -26,9 +24,11 @@ public class A2_Producer {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         Properties properties = new Properties();
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, A1_Config.KAFKA_SERVERS);
-        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        //生产者是ProducerConfig的KEY_SERIALIZER  ,类是：StringSerializer
+        //消费者是ConsumerConfig的KEY_DESERIALIZER,类是：StringDeserializer
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, A1_Config.KAFKA_SERVERS);
+        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         KafkaProducer<String,String> producer =  new KafkaProducer<>(properties);
         //最全的参数:topi,borker序号,时间戳,key,value,header??
