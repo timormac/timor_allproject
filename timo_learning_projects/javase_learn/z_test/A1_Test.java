@@ -1,7 +1,11 @@
 package z_test;
 
+import b_权限_类_方法是否可跨包_跨类.A1_非public不可跨包;
+import d_面向对象编程.A2_代码块执行顺序;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -16,9 +20,8 @@ public class A1_Test {
 
     public static void main(String[] args) {
 
-        ArrayList<String> strings = new ArrayList<>();
+       // A1_非public不可跨包.InnerClass a = new A1_非public不可跨包.InnerClass();
 
-        HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 
 
     }

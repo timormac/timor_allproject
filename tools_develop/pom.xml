@@ -18,6 +18,15 @@
 
 
     <dependencies>
+        <!--  导入flink包,内置2.4.1版本的kafkaClient包-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka_2.12</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

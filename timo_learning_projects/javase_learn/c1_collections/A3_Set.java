@@ -1,5 +1,6 @@
 package c1_collections;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -14,10 +15,10 @@ public class A3_Set {
     public static void main(String[] args) {
 
         HashSet<String> set = new HashSet<>();
-        set.add("a");
-        System.out.println(set.contains("a"));
-        System.out.println(set.contains("b"));
 
+        //TODO 把list转set
+        ArrayList<String> list = new ArrayList<>();
+        HashSet<String> strings = new HashSet<>(list);
 
 
     }
